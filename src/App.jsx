@@ -28,7 +28,7 @@ const ProtectedRoute = ({ children }) => {
 const ProtectedVerifyEmailRoute = ({ children }) => {
   const { user } = useAuthStore();
 
-  if (user.isVerified) {
+  if (!user || user.isVerified) {
     return <Navigate to={'/'} replace />;
   }
 
