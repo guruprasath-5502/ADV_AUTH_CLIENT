@@ -2,19 +2,24 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lock, Mail, Loader } from 'lucide-react';
 import Input from '../components/Input';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { error, isLoading, login } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      await login(email, password);
+      const response = await login(email, password);
+
+      if (response && !response.user.isVerified) {
+        navigate('/verify-email');
+      }
     } catch (error) {
       console.log(error);
     }
